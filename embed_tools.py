@@ -275,7 +275,7 @@ def mean_pooling(model_output, attention_mask):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
-def contrastive_search(tokenizer, text_model, query, image_list):
+def contrastive_search(query, tokenizer=tokenizer, text_model=text_model):
     """
     Performs contrastive search between a query and a list of image embeddings.
 
@@ -288,6 +288,9 @@ def contrastive_search(tokenizer, text_model, query, image_list):
     Returns:
         A list of tuples, where each tuple contains the image embedding and its similarity score to the query.
     """
+
+    # Retrieve images
+    image_list = load_json_data("/home/cris/Documents/text-generation-webui/extensions/reactive_image/image_data.json")
 
     # Tokenize and encode the query
     encoded_query = tokenizer([query], padding=True, truncation=True, return_tensors='pt')
@@ -313,6 +316,8 @@ def contrastive_search(tokenizer, text_model, query, image_list):
     return similarity_scores
 
 image_tuples = load_json_data("/home/cris/Documents/text-generation-webui/extensions/reactive_image/image_data.json")
+#print(image_tuples[1][2])
+"""
 #print(image_tuples)
 #embeddings = [tuple[1] for tuple in image_tuples]
 
@@ -322,7 +327,7 @@ for score in scores:
     print("\n\n")
 """
 
-
+"""
 sentences = ['search_query: Who was the leader of Germany during WWII?', 'search_query: What do cats look like?']
 
 tokenizer = AutoTokenizer.from_pretrained('nomic-ai/nomic-embed-text-v1')
